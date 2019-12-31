@@ -6,6 +6,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <math.h>
+
 //=============================================================================
 
 const int C_max_len_of_str = 20;
@@ -14,7 +16,7 @@ const int C_max_len_of_arr = 50;
 
 //=============================================================================
 
-char *Make_Right_Str (char *string, int *if_short_string);
+char *Make_Right_Str  (const char *string, int *if_short_string);
 
 int Case_Short_String (const char *string);
 
@@ -30,22 +32,27 @@ int main ()
 
     char *str = (char *) calloc (10, sizeof (char));
 
-    int if_short_string = 0;
     for (int i = 0; i < 5; i++)
     {
         gets (str);
 
-        if_short_string = 0;
+        int if_short_string = 0;
         if (Make_Right_Str (str, &if_short_string) == nullptr)
         {
-            arr[i] = (char *) if_short_string;
+            arr[0] = (char *) if_short_string;
             long long int helper = (long long int) if_short_string;
+//            printf ("HELPER = [%llu]\n", helper);
+//            printf ("MOd = [%d]\n", (int) floor (pow (256, 4)));
+//            helper %= (int) floor (pow (256, 4));
+//            printf ("HELPER = [%llu]\n", helper);
+//            helper += pow (256, 4);
+//            printf ("HELPER = [%llu]\n", helper);
 
             printf ("String = (%s)\n", (char *) &helper);
         }
         else
         {
-            arr[i] = str;
+            arr[0] = str;
         }
     }
 
@@ -58,7 +65,7 @@ char *Make_Right_Str (char *string, int *if_short_string)
 {
     if (strlen (string) >= sizeof (int))
     {
-        return string;
+        return  string;
     }
     else
     {
@@ -70,16 +77,16 @@ char *Make_Right_Str (char *string, int *if_short_string)
 
 int Case_Short_String (const char *string)
 {
-    int res = 0;
+    int ptr = 0;
 
-    res += '$';
+    ptr += '$';
     int pow = 256;
 
     for (int i = 0; i < strlen (string); i++)
     {
-        res += string[i] * pow;
+        ptr += string[i] * pow;
         pow *= 256;
     }
 
-    return res;
+    return ptr;
 }
