@@ -7,16 +7,22 @@
 #include <stdlib.h>
 
 //=============================================================================
+//                          GLOBAL/CONST VARIABLES                            ;
+//=============================================================================
 
 const int C_max_len_of_str = 20;
 
 const int C_max_len_of_arr = 50;
 
+const char C_special_symbol = '!';   // because we want odd
+
 //=============================================================================
 
-char *Make_Right_Str (char *string, int *if_short_string);
+char *Transform_If_Short (char *string, int *if_short_string);
 
 int Case_Short_String (const char *string);
+
+char *Make_Right_Str (char *string);
 
 //=============================================================================
 
@@ -31,17 +37,14 @@ int main ()
     char *str = (char *) calloc (10, sizeof (char));
 
     int if_short_string = 0;
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 3; i++)
     {
         gets (str);
 
         if_short_string = 0;
-        if (Make_Right_Str (str, &if_short_string) == nullptr)
+        if (Transform_If_Short (str, &if_short_string) == nullptr)
         {
             arr[i] = (char *) if_short_string;
-            long long int helper = (long long int) if_short_string;
-
-            printf ("String = (%s)\n", (char *) &helper);
         }
         else
         {
@@ -49,12 +52,19 @@ int main ()
         }
     }
 
+
+    for (int i = 0; i < 3; i++)
+    {
+
+        printf ("Line [%d] = (%s)\n", i, Make_Right_Str (arr[i]));
+    }
+
     return 0;
 }
 
 //=============================================================================
 
-char *Make_Right_Str (char *string, int *if_short_string)
+char *Transform_If_Short (char *string, int *if_short_string)
 {
     if (strlen (string) >= sizeof (int))
     {
@@ -72,7 +82,7 @@ int Case_Short_String (const char *string)
 {
     int res = 0;
 
-    res += '$';
+    res += C_special_symbol;
     int pow = 256;
 
     for (int i = 0; i < strlen (string); i++)
@@ -82,4 +92,20 @@ int Case_Short_String (const char *string)
     }
 
     return res;
+}
+
+//-----------------------------------------------------------------------------
+
+char *Make_Right_Str (char *string)
+{
+    long long int helper = (long long int) string;
+    int val = (int) helper;
+
+    if (val % 256 == C_special_symbol)
+    {
+        val /= 256;
+        return (char *) &val;
+    }
+
+    return string;
 }
